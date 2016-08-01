@@ -58,68 +58,44 @@
 
 	var _Form2 = _interopRequireDefault(_Form);
 
-	var _URLs = __webpack_require__(236);
+	var _URLs = __webpack_require__(241);
 
 	var _URLs2 = _interopRequireDefault(_URLs);
 
+	var _SingleURL = __webpack_require__(243);
+
+	var _SingleURL2 = _interopRequireDefault(_SingleURL);
+
+	var _NavBar = __webpack_require__(244);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var prefix = 'http://localhost:8080';
+
+	var headerObj = {
+	  'base_link': '/',
+	  'web_title': 'OnSite'
+	};
+
+	var contentsObj = {
+	  'url': {
+	    'link': '/onsite',
+	    'title': 'My URLs'
+	  },
+	  'new_form': {
+	    'link': '/form',
+	    'title': 'New URL'
+	  }
+	};
 
 	var App = _react2.default.createClass({
 	  displayName: 'App',
+
 	  render: function render() {
 	    return _react2.default.createElement(
 	      'section',
 	      null,
-	      _react2.default.createElement(
-	        'div',
-	        { className: 'navbar navbar-default navbar-fixed-top' },
-	        _react2.default.createElement(
-	          'div',
-	          { className: 'container' },
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'navbar-header' },
-	            _react2.default.createElement(
-	              _reactRouter.Link,
-	              { to: '/', className: 'navbar-brand' },
-	              'OnSite'
-	            ),
-	            _react2.default.createElement(
-	              'button',
-	              { className: 'navbar-toggle', type: 'button', 'data-toggle': 'collapse', 'data-target': '#navbar-main' },
-	              _react2.default.createElement('span', { className: 'icon-bar' }),
-	              _react2.default.createElement('span', { className: 'icon-bar' }),
-	              _react2.default.createElement('span', { className: 'icon-bar' })
-	            )
-	          ),
-	          _react2.default.createElement(
-	            'div',
-	            { className: 'navbar-collapse collapse', id: 'navbar-main' },
-	            _react2.default.createElement(
-	              'ul',
-	              { className: 'nav navbar-nav' },
-	              _react2.default.createElement(
-	                'li',
-	                null,
-	                _react2.default.createElement(
-	                  _reactRouter.Link,
-	                  { to: '/urls' },
-	                  'URLs'
-	                )
-	              ),
-	              _react2.default.createElement(
-	                'li',
-	                null,
-	                _react2.default.createElement(
-	                  _reactRouter.Link,
-	                  { to: '/form' },
-	                  'New'
-	                )
-	              )
-	            )
-	          )
-	        )
-	      ),
+	      _react2.default.createElement(_NavBar.NavBar, { header: headerObj, contents: contentsObj }),
 	      _react2.default.createElement(
 	        'div',
 	        { className: 'container' },
@@ -135,8 +111,9 @@
 	  _react2.default.createElement(
 	    _reactRouter.Route,
 	    { path: '/', component: App },
-	    _react2.default.createElement(_reactRouter.Route, { path: 'urls', component: _URLs2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: 'form', component: _Form2.default })
+	    _react2.default.createElement(_reactRouter.Route, { path: '/onsite/:urlId', url: '/urls/', short_prefix: prefix + '/s/', alias_prefix: prefix + '/a/', component: _SingleURL2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: '/onsite', prefix: prefix, component: _URLs2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: '/form', prefix: prefix, component: _Form2.default })
 	  )
 	), document.getElementById('react-root-elem'));
 
@@ -26793,40 +26770,46 @@
 /* 235 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	  value: true
 	});
 
+	var _stringify = __webpack_require__(236);
+
+	var _stringify2 = _interopRequireDefault(_stringify);
+
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
 
+	var _Page = __webpack_require__(239);
+
+	var _TextInput = __webpack_require__(240);
+
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 	var UrlForm = _react2.default.createClass({
-	  displayName: "UrlForm",
+	  displayName: 'UrlForm',
 	  render: function render() {
+	    console.log((0, _stringify2.default)(this.props.route));
 	    return _react2.default.createElement(
-	      "div",
-	      { className: "page-header" },
+	      'section',
+	      null,
 	      _react2.default.createElement(
-	        "div",
-	        { className: "row" },
+	        _Page.PageHeader,
+	        null,
+	        'URL Form'
+	      ),
+	      _react2.default.createElement(
+	        _Page.PageContent,
+	        null,
 	        _react2.default.createElement(
-	          "div",
-	          { className: "col-lg-8 col-md-7 col-sm-6" },
-	          _react2.default.createElement(
-	            "h1",
-	            null,
-	            "Formssomething"
-	          ),
-	          _react2.default.createElement(
-	            "p",
-	            { className: "lead" },
-	            "hey"
-	          )
+	          _TextInput.InputWrapper,
+	          { legend: 'New URL' },
+	          _react2.default.createElement(_TextInput.InputURL, { url: '/urls', alias_prefix: this.props.route.prefix + '/a/',
+	            short_prefix: this.props.route.prefix + '/s/' })
 	        )
 	      )
 	    );
@@ -26839,11 +26822,30 @@
 /* 236 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	module.exports = { "default": __webpack_require__(237), __esModule: true };
 
-	Object.defineProperty(exports, "__esModule", {
-	  value: true
-	});
+/***/ },
+/* 237 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var core  = __webpack_require__(238)
+	  , $JSON = core.JSON || (core.JSON = {stringify: JSON.stringify});
+	module.exports = function stringify(it){ // eslint-disable-line no-unused-vars
+	  return $JSON.stringify.apply($JSON, arguments);
+	};
+
+/***/ },
+/* 238 */
+/***/ function(module, exports) {
+
+	var core = module.exports = {version: '2.4.0'};
+	if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
+
+/***/ },
+/* 239 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
 
 	var _react = __webpack_require__(1);
 
@@ -26851,8 +26853,9 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var UrlsGeneric = _react2.default.createClass({
-	  displayName: "UrlsGeneric",
+	var PageHeader = _react2.default.createClass({
+	  displayName: "PageHeader",
+
 	  render: function render() {
 	    return _react2.default.createElement(
 	      "div",
@@ -26866,12 +26869,7 @@
 	          _react2.default.createElement(
 	            "h1",
 	            null,
-	            "URLs"
-	          ),
-	          _react2.default.createElement(
-	            "p",
-	            { className: "lead" },
-	            "Urls generic"
+	            this.props.children
 	          )
 	        )
 	      )
@@ -26879,7 +26877,665 @@
 	  }
 	});
 
+	var PageContent = _react2.default.createClass({
+	  displayName: "PageContent",
+
+	  render: function render() {
+	    return _react2.default.createElement(
+	      "div",
+	      { className: "row" },
+	      _react2.default.createElement(
+	        "div",
+	        { className: "col-lg-12" },
+	        _react2.default.createElement(
+	          "div",
+	          { className: "bs-component" },
+	          this.props.children
+	        )
+	      )
+	    );
+	  }
+	});
+
+	module.exports.PageHeader = PageHeader;
+	module.exports.PageContent = PageContent;
+
+/***/ },
+/* 240 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _stringify = __webpack_require__(236);
+
+	var _stringify2 = _interopRequireDefault(_stringify);
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var Panel = _react2.default.createClass({
+	  displayName: 'Panel',
+
+	  render: function render() {
+	    return _react2.default.createElement(
+	      'div',
+	      { className: 'panel panel-' + this.props.panel_type },
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'panel-heading' },
+	        _react2.default.createElement(
+	          'h3',
+	          { className: 'panel-title' },
+	          this.props.panel_title
+	        )
+	      ),
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'panel-body' },
+	        this.props.children
+	      )
+	    );
+	  }
+	});
+
+	var MessageWall = _react2.default.createClass({
+	  displayName: 'MessageWall',
+
+
+	  componentDidMount: function componentDidMount() {
+	    if (this.props.show === true) $("#alertMessage").show();
+	  },
+
+	  componentDidUpdate: function componentDidUpdate() {
+	    console.log("update: " + (0, _stringify2.default)(this.props));
+	    if (this.props.show === true) $("#alertMessage").show();else $("#alertMessage").hide();
+	  },
+
+	  render: function render() {
+	    var classesToUse = 'alert alert-dismissible alert-danger';
+	    if (this.props.type === 'success') {
+	      classesToUse = 'alert alert-dismissible alert-success';
+	    }
+
+	    return _react2.default.createElement(
+	      'div',
+	      { className: 'row' },
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'col-lg-12' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'bs-component' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: classesToUse, id: 'alertMessage', hidden: true },
+	            _react2.default.createElement(
+	              'button',
+	              { type: 'button', className: 'close' },
+	              '×'
+	            ),
+	            this.props.message
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+
+	var InputWrapper = _react2.default.createClass({
+	  displayName: 'InputWrapper',
+
+	  render: function render() {
+	    return _react2.default.createElement(
+	      'div',
+	      { className: 'col-lg-8' },
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'well bs-component' },
+	        _react2.default.createElement(
+	          'form',
+	          { className: 'form-horizontal' },
+	          _react2.default.createElement(
+	            'fieldset',
+	            null,
+	            _react2.default.createElement(
+	              'legend',
+	              null,
+	              this.props.legend
+	            ),
+	            this.props.children
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+
+	var InputURL = _react2.default.createClass({
+	  displayName: 'InputURL',
+
+	  getInitialState: function getInitialState() {
+	    return { original: '',
+	      alias: '',
+	      enable_alias: false,
+	      message: '',
+	      show: false,
+	      typeOfMsg: 'error' };
+	  },
+
+	  handleOriginalChange: function handleOriginalChange(e) {
+	    this.setState({ original: e.target.value });
+	  },
+
+	  handleAliasChange: function handleAliasChange(e) {
+	    this.setState({ alias: e.target.value });
+	  },
+
+	  handleCheckBoxChange: function handleCheckBoxChange(e) {
+	    this.setState({ enable_alias: e.target.checked });
+	    if (e.target.checked) $('#inputAlias').prop('disabled', false);else $('#inputAlias').prop('disabled', true);
+	  },
+
+	  sendInformationToServer: function sendInformationToServer() {
+	    var data = {};
+	    data['original'] = this.state.original;
+	    if (this.state.enable_alias) data['alias'] = this.state.alias;
+	    console.log((0, _stringify2.default)(data));
+
+	    $.ajax({
+	      url: this.props.url,
+	      type: 'POST',
+	      data: data,
+	      dataType: 'json',
+	      success: function (data) {
+	        var s_message = '';
+	        if (data.short) s_message = _react2.default.createElement(
+	          'p',
+	          null,
+	          'New Short URL created. View ',
+	          _react2.default.createElement(
+	            'a',
+	            { target: '_blank',
+	              href: this.props.short_prefix + data.short },
+	            'here'
+	          ),
+	          '.'
+	        );
+	        if (data.alias) {
+	          s_message = _react2.default.createElement(
+	            'p',
+	            null,
+	            'New Alias URL created. View ',
+	            _react2.default.createElement(
+	              'a',
+	              { target: '_blank',
+	                href: this.props.alias_prefix + data.alias },
+	              'here'
+	            ),
+	            '.'
+	          );
+	        }
+
+	        this.setState({ original: '',
+	          alias: '',
+	          typeOfMsg: 'success',
+	          message: s_message,
+	          show: true });
+	      }.bind(this),
+	      error: function (xhr, status, err) {
+	        this.setState({ typeOfMsg: 'error',
+	          message: err.toString() + ':  ' + xhr.responseText,
+	          show: true });
+	      }.bind(this)
+	    });
+	  },
+
+	  render: function render() {
+	    return _react2.default.createElement(
+	      'div',
+	      null,
+	      _react2.default.createElement(MessageWall, { show: this.state.show, message: this.state.message, type: this.state.typeOfMsg }),
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'form-group' },
+	        _react2.default.createElement(
+	          'label',
+	          { htmlFor: 'inputURL', className: 'col-lg-2 control-label' },
+	          'URL'
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'col-lg-10' },
+	          _react2.default.createElement('input', { type: 'text', className: 'form-control', id: 'inputURL', value: this.state.original,
+	            onChange: this.handleOriginalChange, placeholder: 'Original URL' }),
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'checkbox' },
+	            _react2.default.createElement(
+	              'label',
+	              null,
+	              _react2.default.createElement('input', { type: 'checkbox', id: 'enableAliasBox', value: 'off',
+	                onChange: this.handleCheckBoxChange }),
+	              'Personalized alias'
+	            )
+	          )
+	        )
+	      ),
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'form-group' },
+	        _react2.default.createElement(
+	          'label',
+	          { htmlFor: 'inputAlias', className: 'col-lg-2 control-label' },
+	          'Alias'
+	        ),
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'col-lg-10' },
+	          _react2.default.createElement('input', { type: 'text', className: 'form-control', id: 'inputAlias', value: this.state.alias,
+	            onChange: this.handleAliasChange, placeholder: 'Personalized Alias', disabled: true })
+	        )
+	      ),
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'form-group' },
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'col-lg-10 col-lg-offset-2' },
+	          _react2.default.createElement(
+	            'button',
+	            { type: 'button', className: 'btn btn-primary', onClick: this.sendInformationToServer },
+	            'Submit'
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+
+	module.exports.InputWrapper = InputWrapper;
+	module.exports.InputURL = InputURL;
+	module.exports.Panel = Panel;
+
+/***/ },
+/* 241 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Page = __webpack_require__(239);
+
+	var _TableURL = __webpack_require__(242);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var UrlsGeneric = _react2.default.createClass({
+	  displayName: 'UrlsGeneric',
+	  render: function render() {
+	    return _react2.default.createElement(
+	      'section',
+	      null,
+	      _react2.default.createElement(
+	        _Page.PageHeader,
+	        null,
+	        'URL Shortener App'
+	      ),
+	      _react2.default.createElement(
+	        _Page.PageContent,
+	        null,
+	        _react2.default.createElement(_TableURL.Table, { url: '/urls?short=true', prefix: this.props.route.prefix + '/s/',
+	          table_headers: ['#', 'Original URL', 'Short URL'] }),
+	        _react2.default.createElement(_TableURL.Table, { url: '/urls?alias=true', prefix: this.props.route.prefix + '/a/',
+	          table_headers: ['Personal Alias', 'Original URL'] })
+	      )
+	    );
+	  }
+	});
+
 	exports.default = UrlsGeneric;
+
+/***/ },
+/* 242 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var LinkCell = _react2.default.createClass({
+	  displayName: 'LinkCell',
+
+	  render: function render() {
+	    return _react2.default.createElement(
+	      'td',
+	      null,
+	      _react2.default.createElement(
+	        'a',
+	        { target: '_blank', href: this.props.children },
+	        this.props.children
+	      )
+	    );
+	  }
+	});
+	var Table = _react2.default.createClass({
+	  displayName: 'Table',
+
+
+	  loadURLsFromServer: function loadURLsFromServer() {
+	    console.log('loadURLsFromServer');
+	    $.ajax({
+	      url: this.props.url,
+	      dataType: 'json',
+	      success: function (data) {
+	        this.setState({ data: data });
+	      }.bind(this),
+	      error: function (xhr, status, err) {
+	        alert(err.toString());
+	      }.bind(this)
+	    });
+	  },
+
+	  getInitialState: function getInitialState() {
+	    return { data: [] };
+	  },
+
+	  componentDidMount: function componentDidMount() {
+	    this.loadURLsFromServer();
+	  },
+
+	  render: function render() {
+	    var prefix = this.props.prefix;
+	    var tableHeaders = this.props.table_headers.map(function (header) {
+	      return _react2.default.createElement(
+	        'th',
+	        null,
+	        header
+	      );
+	    });
+
+	    var tableRows = this.state.data.map(function (row) {
+	      var cols = [];
+	      var search = '?alias=true';
+	      if (!row.alias) search = '?short=true';
+	      cols.push(_react2.default.createElement(
+	        'td',
+	        null,
+	        _react2.default.createElement(
+	          'a',
+	          { href: 'onsite/' + row['_id'] + search },
+	          row['_id']
+	        )
+	      ));
+	      if ('alias' in row) cols.push(_react2.default.createElement(
+	        LinkCell,
+	        null,
+	        prefix + row['alias']
+	      ));
+	      if ('original' in row) cols.push(_react2.default.createElement(
+	        'td',
+	        null,
+	        row['original']
+	      ));
+	      if ('short' in row) cols.push(_react2.default.createElement(
+	        LinkCell,
+	        null,
+	        prefix + row['short']
+	      ));
+	      return _react2.default.createElement(
+	        'tr',
+	        { key: row['_id'] },
+	        cols
+	      );
+	    });
+
+	    return _react2.default.createElement(
+	      'table',
+	      { className: 'table table-striped table-hover ' },
+	      _react2.default.createElement(
+	        'thead',
+	        null,
+	        _react2.default.createElement(
+	          'tr',
+	          null,
+	          tableHeaders
+	        )
+	      ),
+	      _react2.default.createElement(
+	        'tbody',
+	        null,
+	        tableRows
+	      )
+	    );
+	  }
+	});
+
+	module.exports.Table = Table;
+
+/***/ },
+/* 243 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Page = __webpack_require__(239);
+
+	var _TextInput = __webpack_require__(240);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var SingleURL = _react2.default.createClass({
+	  displayName: 'SingleURL',
+
+
+	  getInitialState: function getInitialState() {
+	    return { id: -1,
+	      original: '',
+	      alias: '',
+	      title: 'URL' };
+	  },
+
+	  loadURLFromServer: function loadURLFromServer() {
+	    var server_url = this.props.route.url + this.props.routeParams.urlId + '/' + this.props.location.search;
+	    console.log(server_url);
+	    $.ajax({
+	      url: server_url,
+	      dataType: 'json',
+	      success: function (data) {
+	        var alias = '';
+	        var title = '';
+	        if (data.alias) {
+	          alias = this.props.route.alias_prefix + data.alias;
+	          title = 'Personalized URL';
+	        } else {
+	          alias = this.props.route.short_prefix + data.short;
+	          title = 'Short URL generated by app';
+	        }
+
+	        this.setState({
+	          id: data._id,
+	          original: data.original,
+	          alias: alias,
+	          title: title });
+	      }.bind(this),
+
+	      error: function (xhr, status, err) {
+	        alert(err.toString());
+	      }.bind(this)
+	    });
+	  },
+
+	  componentDidMount: function componentDidMount() {
+	    this.loadURLFromServer();
+	  },
+
+	  render: function render() {
+	    return _react2.default.createElement(
+	      'div',
+	      null,
+	      _react2.default.createElement(
+	        _Page.PageHeader,
+	        null,
+	        _react2.default.createElement(
+	          'i',
+	          null,
+	          this.state.id
+	        )
+	      ),
+	      _react2.default.createElement(
+	        _Page.PageContent,
+	        null,
+	        _react2.default.createElement(
+	          'div',
+	          { className: 'col-lg-8' },
+	          _react2.default.createElement(
+	            'div',
+	            { className: 'bs-component' },
+	            _react2.default.createElement(
+	              _TextInput.Panel,
+	              { panel_type: 'info', panel_title: 'Original URL' },
+	              _react2.default.createElement(
+	                'p',
+	                null,
+	                this.state.original
+	              )
+	            ),
+	            _react2.default.createElement(
+	              _TextInput.Panel,
+	              { panel_type: 'info', panel_title: this.state.title },
+	              _react2.default.createElement(
+	                'a',
+	                { href: this.state.alias, target: '_blank' },
+	                this.state.alias
+	              )
+	            )
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+
+	exports.default = SingleURL;
+
+/***/ },
+/* 244 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _reactRouter = __webpack_require__(172);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var ToggleNavBar = _react2.default.createClass({
+	  displayName: 'ToggleNavBar',
+
+	  render: function render() {
+	    return _react2.default.createElement(
+	      'button',
+	      { className: 'navbar-toggle', type: 'button', 'data-toggle': 'collapse', 'data-target': '#navbar-main' },
+	      _react2.default.createElement('span', { className: 'icon-bar' }),
+	      _react2.default.createElement('span', { className: 'icon-bar' }),
+	      _react2.default.createElement('span', { className: 'icon-bar' })
+	    );
+	  }
+	});
+
+	var NavBarHeader = _react2.default.createClass({
+	  displayName: 'NavBarHeader',
+
+	  render: function render() {
+	    return _react2.default.createElement(
+	      'div',
+	      { className: 'navbar-header' },
+	      _react2.default.createElement(
+	        _reactRouter.Link,
+	        { to: this.props.header.base_link, className: 'navbar-brand' },
+	        this.props.header.web_title
+	      ),
+	      _react2.default.createElement(ToggleNavBar, null)
+	    );
+	  }
+	});
+
+	var NavBarContent = _react2.default.createClass({
+	  displayName: 'NavBarContent',
+
+	  render: function render() {
+	    return _react2.default.createElement(
+	      'div',
+	      { className: 'navbar-collapse collapse', id: 'navbar-main' },
+	      _react2.default.createElement(
+	        'ul',
+	        { className: 'nav navbar-nav' },
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          _react2.default.createElement(
+	            _reactRouter.Link,
+	            { to: this.props.contents.url.link },
+	            this.props.contents.url.title
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'li',
+	          null,
+	          _react2.default.createElement(
+	            _reactRouter.Link,
+	            { to: this.props.contents.new_form.link },
+	            this.props.contents.new_form.title
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+
+	var NavBar = _react2.default.createClass({
+	  displayName: 'NavBar',
+
+	  render: function render() {
+	    return _react2.default.createElement(
+	      'div',
+	      { className: 'navbar navbar-default navbar-fixed-top' },
+	      _react2.default.createElement(
+	        'div',
+	        { className: 'container' },
+	        _react2.default.createElement(NavBarHeader, { header: this.props.header }),
+	        _react2.default.createElement(NavBarContent, { contents: this.props.contents })
+	      )
+	    );
+	  }
+	});
+
+	module.exports.NavBar = NavBar;
 
 /***/ }
 /******/ ]);

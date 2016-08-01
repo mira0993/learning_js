@@ -2,35 +2,34 @@ import React from 'react';
 import { render } from 'react-dom';
 import { Router, Route, Link, browserHistory } from 'react-router';
 
-import UrlForm from './components/Form.js';
-import UrlsGeneric from './components/URLs.js';
+import UrlForm from './components/Form.jsx';
+import UrlsGeneric from './components/URLs.jsx';
+import SingleURL from './components/SingleURL.jsx';
+import { NavBar } from './components/NavBar/NavBar.jsx';
+
+var prefix='http://localhost:8080';
+
+var headerObj = {
+  'base_link': '/',
+  'web_title': 'OnSite'
+}
+
+var contentsObj = {
+  'url':{
+    'link':'/onsite',
+    'title':'My URLs'
+  },
+  'new_form':{
+    'link':'/form',
+    'title':'New URL'
+  }
+}
 
 const App = React.createClass({
-  render(){
+  render: function(){
     return(
       <section>
-        <div className="navbar navbar-default navbar-fixed-top">
-          <div className="container">
-            <div className="navbar-header">
-              <Link to="/" className="navbar-brand">OnSite</Link>
-              <button className="navbar-toggle" type="button" data-toggle="collapse" data-target="#navbar-main">
-                <span className="icon-bar"></span>
-                <span className="icon-bar"></span>
-                <span className="icon-bar"></span>
-              </button>
-            </div>
-            <div className="navbar-collapse collapse" id="navbar-main">
-              <ul className="nav navbar-nav">
-                <li>
-                  <Link to="/urls">URLs</Link>
-                </li>
-                <li>
-                  <Link to="/form">New</Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
+        <NavBar header={headerObj} contents={contentsObj}/>
         <div className="container">
           {this.props.children}
         </div>
@@ -43,9 +42,9 @@ const App = React.createClass({
 render((
   <Router history={browserHistory}>
     <Route path="/" component={App}>
-      <Route path="urls" component={UrlsGeneric}/>
-
-      <Route path="form" component={UrlForm}/>
+      <Route path="/onsite/:urlId" url='/urls/' short_prefix={prefix+'/s/'} alias_prefix={prefix+'/a/'} component={SingleURL}/>
+      <Route path="/onsite" prefix={prefix} component={UrlsGeneric}/>
+      <Route path="/form"  prefix={prefix} component={UrlForm}/>
     </Route>
   </Router>
 ), document.getElementById('react-root-elem'));
