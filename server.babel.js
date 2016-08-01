@@ -18,6 +18,12 @@ app.use(bodyparser.urlencoded({extended: false}));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // ------------- API ------------------ //
+
+var defaultHandler = function(req, res){ res.sendFile(path.join(__dirname,'public/index.html'))};
+
+app.get('/', defaultHandler);
+app.get('/onsite*', defaultHandler);
+app.get('/form', defaultHandler);
 app.get('/urls', urlrouter.getAllURLs);
 app.post('/urls', urlrouter.insertURL);
 app.get('/urls/:id', urlrouter.showURL);
