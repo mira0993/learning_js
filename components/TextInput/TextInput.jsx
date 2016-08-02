@@ -1,5 +1,6 @@
 import React from 'react';
 
+// Generic panel component
 var Panel = React.createClass({
   render: function(){
     return(
@@ -15,6 +16,7 @@ var Panel = React.createClass({
   }
 })
 
+// Panel for  error/sucess message
 var MessageWall = React.createClass({
 
   componentDidMount: function(){
@@ -22,6 +24,8 @@ var MessageWall = React.createClass({
       $("#alertMessage").show();
   },
 
+  // We must show or hide the component depending of the updated values in props.
+  // the parent component will udpate the props.
   componentDidUpdate: function(){
     console.log("update: "+JSON.stringify(this.props));
     if(this.props.show === true)
@@ -52,6 +56,7 @@ var MessageWall = React.createClass({
   }
 });
 
+// Fieldset
 var InputWrapper = React.createClass({
   render: function(){
     return(
@@ -69,6 +74,7 @@ var InputWrapper = React.createClass({
   }
 });
 
+// URL Input
 var InputURL = React.createClass({
   getInitialState: function(){
     return {original: '',
@@ -95,6 +101,7 @@ var InputURL = React.createClass({
       $('#inputAlias').prop('disabled', true);
   },
 
+  // Do the post to the server to create the new URL
   sendInformationToServer: function(){
     var data = {};
     data['original'] = this.state.original;
@@ -108,15 +115,18 @@ var InputURL = React.createClass({
       data: data,
       dataType: 'json',
       success: function(data){
+        var url = 'http://'+data.server
         var s_message = '';
-        if(data.short)
-          s_message=(<p>New Short URL created. View <a target="_blank"
-                    href={this.props.short_prefix+data.short}>here</a>.</p>);
-        if(data.alias){
-          s_message=(<p>New Alias URL created. View <a target="_blank"
-                    href={this.props.alias_prefix+data.alias}>here</a>.</p>);
+        if(data.data.short){
+          s_message=(<p>Short URL: <a target="_blank"
+                    href={url+this.props.short_prefix+data.data.short}>
+                    {url+this.props.short_prefix+data.data.short}</a></p>);
         }
-
+        if(data.data.alias){
+          s_message=(<p>Personalized URL: <a target="_blank"
+                    href={url+this.props.alias_prefix+data.data.alias}>
+                    {url+this.props.alias_prefix+data.data.alias}</a></p>);
+        }
         this.setState({original: '',
                        alias: '',
                        typeOfMsg:'success',
@@ -154,7 +164,11 @@ var InputURL = React.createClass({
           <div className="col-lg-10">
             <input type="text" className="form-control" id="inputAlias" value={this.state.alias}
               onChange={this.handleAliasChange} placeholder="Personalized Alias" disabled/>
+              <span className="help-block">
+                You should only write an alias. Your URL will look like this: <strong>{'http://<server>/a/<your_alias>'}</strong>
+              </span>
           </div>
+
         </div>
         <div className="form-group">
             <div className="col-lg-10 col-lg-offset-2">

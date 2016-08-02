@@ -1,5 +1,6 @@
 import React from 'react';
 
+// Basic header
 var PageHeader = React.createClass({
   render: function(){
     return(
@@ -15,6 +16,7 @@ var PageHeader = React.createClass({
   }
 });
 
+// Container of all the page
 var PageContent = React.createClass({
   render: function(){
     return (

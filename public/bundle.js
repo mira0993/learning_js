@@ -54,23 +54,25 @@
 
 	var _reactRouter = __webpack_require__(172);
 
-	var _Form = __webpack_require__(235);
+	var _OnSite = __webpack_require__(235);
+
+	var _OnSite2 = _interopRequireDefault(_OnSite);
+
+	var _Form = __webpack_require__(241);
 
 	var _Form2 = _interopRequireDefault(_Form);
 
-	var _URLs = __webpack_require__(241);
+	var _URLs = __webpack_require__(242);
 
 	var _URLs2 = _interopRequireDefault(_URLs);
 
-	var _SingleURL = __webpack_require__(243);
+	var _SingleURL = __webpack_require__(244);
 
 	var _SingleURL2 = _interopRequireDefault(_SingleURL);
 
-	var _NavBar = __webpack_require__(244);
+	var _NavBar = __webpack_require__(245);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var prefix = 'http://localhost:8080';
 
 	var headerObj = {
 	  'base_link': '/',
@@ -88,6 +90,7 @@
 	  }
 	};
 
+	// The app will have only the navigation bar to keep it visible always.
 	var App = _react2.default.createClass({
 	  displayName: 'App',
 
@@ -105,15 +108,17 @@
 	  }
 	});
 
+	// React router declaration.
 	(0, _reactDom.render)(_react2.default.createElement(
 	  _reactRouter.Router,
 	  { history: _reactRouter.browserHistory },
 	  _react2.default.createElement(
 	    _reactRouter.Route,
 	    { path: '/', component: App },
-	    _react2.default.createElement(_reactRouter.Route, { path: '/onsite/:urlId', url: '/urls/', short_prefix: prefix + '/s/', alias_prefix: prefix + '/a/', component: _SingleURL2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: '/onsite', prefix: prefix, component: _URLs2.default }),
-	    _react2.default.createElement(_reactRouter.Route, { path: '/form', prefix: prefix, component: _Form2.default })
+	    _react2.default.createElement(_reactRouter.IndexRoute, { component: _OnSite2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: '/onsite/:urlId', url: '/urls/', short_prefix: '/s/', alias_prefix: '/a/', component: _SingleURL2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: '/onsite', short_prefix: '/s/', alias_prefix: '/a/', component: _URLs2.default }),
+	    _react2.default.createElement(_reactRouter.Route, { path: '/form', short_prefix: '/s/', alias_prefix: '/a/', component: _Form2.default })
 	  )
 	), document.getElementById('react-root-elem'));
 
@@ -26776,137 +26781,173 @@
 	  value: true
 	});
 
-	var _stringify = __webpack_require__(236);
-
-	var _stringify2 = _interopRequireDefault(_stringify);
-
 	var _react = __webpack_require__(1);
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Page = __webpack_require__(239);
+	var _TextInput = __webpack_require__(236);
 
-	var _TextInput = __webpack_require__(240);
+	var _Page = __webpack_require__(240);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-	var UrlForm = _react2.default.createClass({
-	  displayName: 'UrlForm',
+	var backend = ['Node.js', 'Express Framework', 'MongoDB/Mongoose'];
+	var frontend = ['React', 'Bootstrap theme', 'JQuery'];
+	var url_api_headers = ['Method', 'URL', 'Return Value', 'Description'];
+	var url_api = [{
+	  method: 'GET',
+	  url: '/urls',
+	  description: 'Retrieve all the short URLs and personalized URLs ',
+	  returnVal: 'JSON: list of all the URLs: {\'data:\'{\'short\': [], \'alias\': [], \'server\':<String>}'
+	}, {
+	  method: 'GET',
+	  url: '/urls?alias=true',
+	  description: 'Retrieve all personalized URLs.',
+	  returnVal: 'JSON: list of all the URLs: {\'data\':[],\'server\':<String>}'
+	}, {
+	  method: 'GET',
+	  url: '/urls?short=true',
+	  description: 'Retrieve all the short URLs.',
+	  returnVal: 'JSON: list of all the URLs:{\'data\':[],\'server\':<String>}'
+	}, {
+	  method: 'GET',
+	  url: '/urls/:id',
+	  description: 'Retrieve a single URL. If we pass \'?alias=true\' or ' + '\'?short=true\', then it will look into the specific connection.',
+	  returnVal: 'JSON with specific URL information.'
+	}, {
+	  method: 'POST',
+	  url: '/urls',
+	  description: 'Create a new URL. If \'alias\' key is found in the body, then' + 'add to personalized aliases collection. If not, then generate a unique' + 'random url',
+	  returnVal: 'JSON with the created URL information.'
+
+	}];
+
+	var OnSite = _react2.default.createClass({
+	  displayName: 'OnSite',
+
 	  render: function render() {
-	    console.log((0, _stringify2.default)(this.props.route));
+	    var index = 0;
+	    var headers = url_api_headers.map(function (header) {
+	      return _react2.default.createElement(
+	        'th',
+	        { key: 'th_' + header.replace(' ', '_') },
+	        header
+	      );
+	    });
+	    var backend_li = backend.map(function (item) {
+	      index += 1;
+	      return _react2.default.createElement(
+	        'li',
+	        { key: 'back' + index },
+	        item
+	      );
+	    });
+	    var frontend_li = frontend.map(function (item) {
+	      index += 1;
+	      return _react2.default.createElement(
+	        'li',
+	        { key: 'front' + index },
+	        item
+	      );
+	    });
+	    var api_rows = url_api.map(function (item) {
+	      index += 1;
+	      return _react2.default.createElement(
+	        'tr',
+	        { key: 'url_api_' + index },
+	        _react2.default.createElement(
+	          'td',
+	          null,
+	          item['method']
+	        ),
+	        _react2.default.createElement(
+	          'td',
+	          null,
+	          _react2.default.createElement(
+	            'pre',
+	            null,
+	            item['url']
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'td',
+	          null,
+	          _react2.default.createElement(
+	            'pre',
+	            null,
+	            item['returnVal']
+	          )
+	        ),
+	        _react2.default.createElement(
+	          'td',
+	          null,
+	          item['description']
+	        )
+	      );
+	    });
+
 	    return _react2.default.createElement(
 	      'section',
 	      null,
 	      _react2.default.createElement(
 	        _Page.PageHeader,
 	        null,
-	        'URL Form'
+	        'OnSite Introduction'
 	      ),
 	      _react2.default.createElement(
 	        _Page.PageContent,
 	        null,
 	        _react2.default.createElement(
-	          _TextInput.InputWrapper,
-	          { legend: 'New URL' },
-	          _react2.default.createElement(_TextInput.InputURL, { url: '/urls', alias_prefix: this.props.route.prefix + '/a/',
-	            short_prefix: this.props.route.prefix + '/s/' })
-	        )
-	      )
-	    );
-	  }
-	});
-
-	exports.default = UrlForm;
-
-/***/ },
-/* 236 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = { "default": __webpack_require__(237), __esModule: true };
-
-/***/ },
-/* 237 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var core  = __webpack_require__(238)
-	  , $JSON = core.JSON || (core.JSON = {stringify: JSON.stringify});
-	module.exports = function stringify(it){ // eslint-disable-line no-unused-vars
-	  return $JSON.stringify.apply($JSON, arguments);
-	};
-
-/***/ },
-/* 238 */
-/***/ function(module, exports) {
-
-	var core = module.exports = {version: '2.4.0'};
-	if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
-
-/***/ },
-/* 239 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var _react = __webpack_require__(1);
-
-	var _react2 = _interopRequireDefault(_react);
-
-	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-	var PageHeader = _react2.default.createClass({
-	  displayName: "PageHeader",
-
-	  render: function render() {
-	    return _react2.default.createElement(
-	      "div",
-	      { className: "page-header" },
-	      _react2.default.createElement(
-	        "div",
-	        { className: "row" },
-	        _react2.default.createElement(
-	          "div",
-	          { className: "col-lg-8 col-md-7 col-sm-6" },
+	          _TextInput.Panel,
+	          { panel_type: 'info', panel_title: 'Tools' },
 	          _react2.default.createElement(
-	            "h1",
+	            'h3',
 	            null,
-	            this.props.children
+	            'Back-end'
+	          ),
+	          backend_li,
+	          _react2.default.createElement(
+	            'h3',
+	            null,
+	            'Front-end'
+	          ),
+	          frontend_li
+	        ),
+	        _react2.default.createElement(
+	          _TextInput.Panel,
+	          { panel_type: 'info', panel_title: 'API' },
+	          _react2.default.createElement(
+	            'table',
+	            { className: 'table table-striped table-hover ' },
+	            _react2.default.createElement(
+	              'thead',
+	              null,
+	              _react2.default.createElement(
+	                'tr',
+	                null,
+	                headers
+	              )
+	            ),
+	            _react2.default.createElement(
+	              'tbody',
+	              null,
+	              api_rows
+	            )
 	          )
 	        )
 	      )
 	    );
 	  }
 	});
-
-	var PageContent = _react2.default.createClass({
-	  displayName: "PageContent",
-
-	  render: function render() {
-	    return _react2.default.createElement(
-	      "div",
-	      { className: "row" },
-	      _react2.default.createElement(
-	        "div",
-	        { className: "col-lg-12" },
-	        _react2.default.createElement(
-	          "div",
-	          { className: "bs-component" },
-	          this.props.children
-	        )
-	      )
-	    );
-	  }
-	});
-
-	module.exports.PageHeader = PageHeader;
-	module.exports.PageContent = PageContent;
+	exports.default = OnSite;
 
 /***/ },
-/* 240 */
+/* 236 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var _stringify = __webpack_require__(236);
+	var _stringify = __webpack_require__(237);
 
 	var _stringify2 = _interopRequireDefault(_stringify);
 
@@ -26916,6 +26957,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	// Generic panel component
 	var Panel = _react2.default.createClass({
 	  displayName: 'Panel',
 
@@ -26941,6 +26983,7 @@
 	  }
 	});
 
+	// Panel for  error/sucess message
 	var MessageWall = _react2.default.createClass({
 	  displayName: 'MessageWall',
 
@@ -26949,6 +26992,8 @@
 	    if (this.props.show === true) $("#alertMessage").show();
 	  },
 
+	  // We must show or hide the component depending of the updated values in props.
+	  // the parent component will udpate the props.
 	  componentDidUpdate: function componentDidUpdate() {
 	    console.log("update: " + (0, _stringify2.default)(this.props));
 	    if (this.props.show === true) $("#alertMessage").show();else $("#alertMessage").hide();
@@ -26985,6 +27030,7 @@
 	  }
 	});
 
+	// Fieldset
 	var InputWrapper = _react2.default.createClass({
 	  displayName: 'InputWrapper',
 
@@ -27014,6 +27060,7 @@
 	  }
 	});
 
+	// URL Input
 	var InputURL = _react2.default.createClass({
 	  displayName: 'InputURL',
 
@@ -27039,6 +27086,7 @@
 	    if (e.target.checked) $('#inputAlias').prop('disabled', false);else $('#inputAlias').prop('disabled', true);
 	  },
 
+	  // Do the post to the server to create the new URL
 	  sendInformationToServer: function sendInformationToServer() {
 	    var data = {};
 	    data['original'] = this.state.original;
@@ -27051,34 +27099,34 @@
 	      data: data,
 	      dataType: 'json',
 	      success: function (data) {
+	        var url = 'http://' + data.server;
 	        var s_message = '';
-	        if (data.short) s_message = _react2.default.createElement(
-	          'p',
-	          null,
-	          'New Short URL created. View ',
-	          _react2.default.createElement(
-	            'a',
-	            { target: '_blank',
-	              href: this.props.short_prefix + data.short },
-	            'here'
-	          ),
-	          '.'
-	        );
-	        if (data.alias) {
+	        if (data.data.short) {
 	          s_message = _react2.default.createElement(
 	            'p',
 	            null,
-	            'New Alias URL created. View ',
+	            'Short URL: ',
 	            _react2.default.createElement(
 	              'a',
 	              { target: '_blank',
-	                href: this.props.alias_prefix + data.alias },
-	              'here'
-	            ),
-	            '.'
+	                href: url + this.props.short_prefix + data.data.short },
+	              url + this.props.short_prefix + data.data.short
+	            )
 	          );
 	        }
-
+	        if (data.data.alias) {
+	          s_message = _react2.default.createElement(
+	            'p',
+	            null,
+	            'Personalized URL: ',
+	            _react2.default.createElement(
+	              'a',
+	              { target: '_blank',
+	                href: url + this.props.alias_prefix + data.data.alias },
+	              url + this.props.alias_prefix + data.data.alias
+	            )
+	          );
+	        }
 	        this.setState({ original: '',
 	          alias: '',
 	          typeOfMsg: 'success',
@@ -27136,7 +27184,17 @@
 	          'div',
 	          { className: 'col-lg-10' },
 	          _react2.default.createElement('input', { type: 'text', className: 'form-control', id: 'inputAlias', value: this.state.alias,
-	            onChange: this.handleAliasChange, placeholder: 'Personalized Alias', disabled: true })
+	            onChange: this.handleAliasChange, placeholder: 'Personalized Alias', disabled: true }),
+	          _react2.default.createElement(
+	            'span',
+	            { className: 'help-block' },
+	            'You should only write an alias. Your URL will look like this: ',
+	            _react2.default.createElement(
+	              'strong',
+	              null,
+	              'http://<server>/a/<your_alias>'
+	            )
+	          )
 	        )
 	      ),
 	      _react2.default.createElement(
@@ -27161,6 +27219,90 @@
 	module.exports.Panel = Panel;
 
 /***/ },
+/* 237 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = { "default": __webpack_require__(238), __esModule: true };
+
+/***/ },
+/* 238 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var core  = __webpack_require__(239)
+	  , $JSON = core.JSON || (core.JSON = {stringify: JSON.stringify});
+	module.exports = function stringify(it){ // eslint-disable-line no-unused-vars
+	  return $JSON.stringify.apply($JSON, arguments);
+	};
+
+/***/ },
+/* 239 */
+/***/ function(module, exports) {
+
+	var core = module.exports = {version: '2.4.0'};
+	if(typeof __e == 'number')__e = core; // eslint-disable-line no-undef
+
+/***/ },
+/* 240 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	// Basic header
+	var PageHeader = _react2.default.createClass({
+	  displayName: "PageHeader",
+
+	  render: function render() {
+	    return _react2.default.createElement(
+	      "div",
+	      { className: "page-header" },
+	      _react2.default.createElement(
+	        "div",
+	        { className: "row" },
+	        _react2.default.createElement(
+	          "div",
+	          { className: "col-lg-8 col-md-7 col-sm-6" },
+	          _react2.default.createElement(
+	            "h1",
+	            null,
+	            this.props.children
+	          )
+	        )
+	      )
+	    );
+	  }
+	});
+
+	// Container of all the page
+	var PageContent = _react2.default.createClass({
+	  displayName: "PageContent",
+
+	  render: function render() {
+	    return _react2.default.createElement(
+	      "div",
+	      { className: "row" },
+	      _react2.default.createElement(
+	        "div",
+	        { className: "col-lg-12" },
+	        _react2.default.createElement(
+	          "div",
+	          { className: "bs-component" },
+	          this.props.children
+	        )
+	      )
+	    );
+	  }
+	});
+
+	module.exports.PageHeader = PageHeader;
+	module.exports.PageContent = PageContent;
+
+/***/ },
 /* 241 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -27174,9 +27316,56 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Page = __webpack_require__(239);
+	var _Page = __webpack_require__(240);
 
-	var _TableURL = __webpack_require__(242);
+	var _TextInput = __webpack_require__(236);
+
+	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+	var UrlForm = _react2.default.createClass({
+	  displayName: 'UrlForm',
+	  render: function render() {
+	    return _react2.default.createElement(
+	      'section',
+	      null,
+	      _react2.default.createElement(
+	        _Page.PageHeader,
+	        null,
+	        'URL Form'
+	      ),
+	      _react2.default.createElement(
+	        _Page.PageContent,
+	        null,
+	        _react2.default.createElement(
+	          _TextInput.InputWrapper,
+	          { legend: 'New URL' },
+	          _react2.default.createElement(_TextInput.InputURL, { url: '/urls', alias_prefix: this.props.route.alias_prefix,
+	            short_prefix: this.props.route.short_prefix })
+	        )
+	      )
+	    );
+	  }
+	});
+
+	exports.default = UrlForm;
+
+/***/ },
+/* 242 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	Object.defineProperty(exports, "__esModule", {
+	  value: true
+	});
+
+	var _react = __webpack_require__(1);
+
+	var _react2 = _interopRequireDefault(_react);
+
+	var _Page = __webpack_require__(240);
+
+	var _TableURL = __webpack_require__(243);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -27194,10 +27383,10 @@
 	      _react2.default.createElement(
 	        _Page.PageContent,
 	        null,
-	        _react2.default.createElement(_TableURL.Table, { url: '/urls?short=true', prefix: this.props.route.prefix + '/s/',
+	        _react2.default.createElement(_TableURL.Table, { url: '/urls?short=true', prefix: this.props.route.short_prefix,
 	          table_headers: ['#', 'Original URL', 'Short URL'] }),
-	        _react2.default.createElement(_TableURL.Table, { url: '/urls?alias=true', prefix: this.props.route.prefix + '/a/',
-	          table_headers: ['Personal Alias', 'Original URL'] })
+	        _react2.default.createElement(_TableURL.Table, { url: '/urls?alias=true', prefix: this.props.route.alias_prefix,
+	          table_headers: ['#', 'Personalized Alias', 'Original URL'] })
 	      )
 	    );
 	  }
@@ -27206,7 +27395,7 @@
 	exports.default = UrlsGeneric;
 
 /***/ },
-/* 242 */
+/* 243 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -27217,6 +27406,7 @@
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+	// Table Cell
 	var LinkCell = _react2.default.createClass({
 	  displayName: 'LinkCell',
 
@@ -27232,17 +27422,19 @@
 	    );
 	  }
 	});
+
+	// URLs Table. Show all the URLs aliases availables.
 	var Table = _react2.default.createClass({
 	  displayName: 'Table',
 
 
+	  // Get the data from the server with /urls
 	  loadURLsFromServer: function loadURLsFromServer() {
-	    console.log('loadURLsFromServer');
 	    $.ajax({
 	      url: this.props.url,
 	      dataType: 'json',
 	      success: function (data) {
-	        this.setState({ data: data });
+	        this.setState({ data: data.data, server: data.server });
 	      }.bind(this),
 	      error: function (xhr, status, err) {
 	        alert(err.toString());
@@ -27251,19 +27443,20 @@
 	  },
 
 	  getInitialState: function getInitialState() {
-	    return { data: [] };
+	    return { data: [], server: 'localhost' };
 	  },
 
+	  // Do the Get after the first render.
 	  componentDidMount: function componentDidMount() {
 	    this.loadURLsFromServer();
 	  },
 
 	  render: function render() {
-	    var prefix = this.props.prefix;
+	    var prefix = 'http://' + this.state.server + this.props.prefix;
 	    var tableHeaders = this.props.table_headers.map(function (header) {
 	      return _react2.default.createElement(
 	        'th',
-	        null,
+	        { key: 'th_' + header.replace(' ', '_') },
 	        header
 	      );
 	    });
@@ -27274,31 +27467,32 @@
 	      if (!row.alias) search = '?short=true';
 	      cols.push(_react2.default.createElement(
 	        'td',
-	        null,
+	        { key: 'col1_' + row['_id'] },
 	        _react2.default.createElement(
 	          'a',
-	          { href: 'onsite/' + row['_id'] + search },
-	          row['_id']
+	          { className: 'btn btn-default btn-xs',
+	            href: 'onsite/' + row['_id'] + search },
+	          'View'
 	        )
 	      ));
 	      if ('alias' in row) cols.push(_react2.default.createElement(
 	        LinkCell,
-	        null,
+	        { key: 'col2_' + row['_id'] },
 	        prefix + row['alias']
 	      ));
 	      if ('original' in row) cols.push(_react2.default.createElement(
 	        'td',
-	        null,
+	        { key: 'col3_' + row['_id'] },
 	        row['original']
 	      ));
 	      if ('short' in row) cols.push(_react2.default.createElement(
 	        LinkCell,
-	        null,
+	        { key: 'col4_' + row['_id'] },
 	        prefix + row['short']
 	      ));
 	      return _react2.default.createElement(
 	        'tr',
-	        { key: row['_id'] },
+	        { key: 'row_' + row['_id'] },
 	        cols
 	      );
 	    });
@@ -27327,7 +27521,7 @@
 	module.exports.Table = Table;
 
 /***/ },
-/* 243 */
+/* 244 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -27340,9 +27534,9 @@
 
 	var _react2 = _interopRequireDefault(_react);
 
-	var _Page = __webpack_require__(239);
+	var _Page = __webpack_require__(240);
 
-	var _TextInput = __webpack_require__(240);
+	var _TextInput = __webpack_require__(236);
 
 	function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -27357,6 +27551,7 @@
 	      title: 'URL' };
 	  },
 
+	  // Get the information of single URL  with GET method
 	  loadURLFromServer: function loadURLFromServer() {
 	    var server_url = this.props.route.url + this.props.routeParams.urlId + '/' + this.props.location.search;
 	    console.log(server_url);
@@ -27366,17 +27561,17 @@
 	      success: function (data) {
 	        var alias = '';
 	        var title = '';
-	        if (data.alias) {
-	          alias = this.props.route.alias_prefix + data.alias;
+	        if (data.data.alias) {
+	          alias = 'http://' + data.server + this.props.route.alias_prefix + data.data.alias;
 	          title = 'Personalized URL';
 	        } else {
-	          alias = this.props.route.short_prefix + data.short;
+	          alias = 'http://' + data.server + this.props.route.short_prefix + data.data.short;
 	          title = 'Short URL generated by app';
 	        }
 
 	        this.setState({
-	          id: data._id,
-	          original: data.original,
+	          id: data.data._id,
+	          original: data.data.original,
 	          alias: alias,
 	          title: title });
 	      }.bind(this),
@@ -27441,7 +27636,7 @@
 	exports.default = SingleURL;
 
 /***/ },
-/* 244 */
+/* 245 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';

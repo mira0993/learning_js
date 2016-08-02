@@ -9,10 +9,10 @@ let UrlsGeneric = React.createClass({
       <section>
         <PageHeader>URL Shortener App</PageHeader>
         <PageContent>
-          <Table url='/urls?short=true' prefix={this.props.route.prefix+'/s/'}
+          <Table url='/urls?short=true' prefix={this.props.route.short_prefix}
             table_headers={['#', 'Original URL', 'Short URL']}/>
-          <Table url='/urls?alias=true' prefix={this.props.route.prefix+'/a/'}
-            table_headers={['Personal Alias','Original URL']}/>
+          <Table url='/urls?alias=true' prefix={this.props.route.alias_prefix}
+            table_headers={['#', 'Personalized Alias','Original URL']}/>
         </PageContent>
       </section>
 

@@ -1,13 +1,11 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { Router, Route, Link, browserHistory } from 'react-router';
-
+import { Router, Route, Link, browserHistory, IndexRoute} from 'react-router';
+import OnSite from './components/OnSite.jsx';
 import UrlForm from './components/Form.jsx';
 import UrlsGeneric from './components/URLs.jsx';
 import SingleURL from './components/SingleURL.jsx';
 import { NavBar } from './components/NavBar/NavBar.jsx';
-
-var prefix='http://localhost:8080';
 
 var headerObj = {
   'base_link': '/',
@@ -25,6 +23,7 @@ var contentsObj = {
   }
 }
 
+// The app will have only the navigation bar to keep it visible always.
 const App = React.createClass({
   render: function(){
     return(
@@ -38,13 +37,14 @@ const App = React.createClass({
   }
 });
 
-
+// React router declaration.
 render((
   <Router history={browserHistory}>
     <Route path="/" component={App}>
-      <Route path="/onsite/:urlId" url='/urls/' short_prefix={prefix+'/s/'} alias_prefix={prefix+'/a/'} component={SingleURL}/>
-      <Route path="/onsite" prefix={prefix} component={UrlsGeneric}/>
-      <Route path="/form"  prefix={prefix} component={UrlForm}/>
+      <IndexRoute component={OnSite}/>
+      <Route path="/onsite/:urlId" url='/urls/' short_prefix={'/s/'} alias_prefix={'/a/'} component={SingleURL}/>
+      <Route path="/onsite" short_prefix={'/s/'} alias_prefix={'/a/'} component={UrlsGeneric}/>
+      <Route path="/form" short_prefix={'/s/'} alias_prefix={'/a/'} component={UrlForm}/>
     </Route>
   </Router>
 ), document.getElementById('react-root-elem'));

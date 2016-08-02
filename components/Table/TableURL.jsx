@@ -1,5 +1,6 @@
 import React from 'react'
 
+// Table Cell
 var LinkCell = React.createClass({
   render: function(){
     return(
@@ -9,15 +10,17 @@ var LinkCell = React.createClass({
     )
   }
 })
+
+// URLs Table. Show all the URLs aliases availables.
 var Table = React.createClass({
 
+  // Get the data from the server with /urls
   loadURLsFromServer: function() {
-    console.log('loadURLsFromServer');
     $.ajax({
       url: this.props.url,
       dataType: 'json',
       success: function(data) {
-        this.setState({data: data});
+        this.setState({data: data.data, server: data.server});
       }.bind(this),
       error: function(xhr, status, err) {
         alert(err.toString());
@@ -26,18 +29,18 @@ var Table = React.createClass({
   },
 
   getInitialState: function(){
-    return {data:[]};
+    return {data:[], server:'localhost'};
   },
 
+  // Do the Get after the first render.
   componentDidMount: function(){
     this.loadURLsFromServer();
   },
 
-
   render: function(){
-    var prefix = this.props.prefix;
+    var prefix = 'http://'+this.state.server+this.props.prefix;
     var tableHeaders = this.props.table_headers.map(function(header){
-      return <th>{header}</th>
+      return <th key={'th_'+header.replace(' ','_')}>{header}</th>
     });
 
     var tableRows = this.state.data.map(function(row){
@@ -45,15 +48,16 @@ var Table = React.createClass({
         var search='?alias=true';
         if(!row.alias)
           search='?short=true';
-        cols.push(<td><a href={'onsite/'+row['_id']+search}>{row['_id']}</a></td>)
+        cols.push(<td key={'col1_'+row['_id']}><a className="btn btn-default btn-xs"
+        href={'onsite/'+row['_id']+search}>View</a></td>)
         if('alias' in row)
-          cols.push(<LinkCell>{prefix+row['alias']}</LinkCell>)
+          cols.push(<LinkCell key={'col2_'+row['_id']}>{prefix+row['alias']}</LinkCell>)
         if('original' in row)
-          cols.push(<td>{row['original']}</td>);
+          cols.push(<td key={'col3_'+row['_id']}>{row['original']}</td>);
         if('short' in row)
-          cols.push(<LinkCell>{prefix+row['short']}</LinkCell>)
+          cols.push(<LinkCell key={'col4_'+row['_id']}>{prefix+row['short']}</LinkCell>)
         return(
-          <tr key={row['_id']}>
+          <tr key={'row_'+row['_id']}>
             {cols}
           </tr>
         )
