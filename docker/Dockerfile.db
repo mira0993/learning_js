@@ -1,0 +1,4 @@
+FROM ubuntu:latest
+RUN apt-get update && apt-get install -y mongodb && mkdir -p /data/db
+EXPOSE 26017
+CMD mongod

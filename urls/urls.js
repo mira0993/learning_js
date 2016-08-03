@@ -23,10 +23,10 @@ exports.getAllURLs = function(req, res){
   }else{
     model.Short.find({}, function(err, short_urls){
       if(err)
-        res.status(400).send(err.message);
+        return res.status(400).send(err.message);
       model.Alias.find({}, function(err, alias_urls){
         if(err)
-          res.status(400).send(err.message);
+          return res.status(400).send(err.message);
         res.json({'data':{'short': short_urls,'alias': alias_urls},
                   'server': req.hostname+':'+req.socket.address().port});
       });
@@ -46,9 +46,9 @@ exports.insertURL = function(req, res){
         if(err.errors.original)
           return res.status(400).send(err.errors.original.message);
         if(err.errors.alias)
-          res.status(400).send(err.errors.alias.message);
+          return res.status(400).send(err.errors.alias.message);
         else
-          res.status(400).send(err.message);
+          return res.status(400).send(err.message);
       }
       res.json({'data':doc,
         'server':req.hostname+':'+req.socket.address().port});
